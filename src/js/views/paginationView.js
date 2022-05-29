@@ -14,28 +14,31 @@ class PaginationView extends View {
       handler(goToPage);
     });
   }
+
   _generateMarkup() {
     const curPage = this._data.page;
     const numPage = Math.ceil(
       this._data.results.length / this._data.resultsPerPage
     );
+    let markup;
 
-    // Page1，and there are other pages
-    if (curPage === 1 && numPage > 1)
-      return this._generateMarkupBtnNext(curPage);
-
-    // Last page
-    if (curPage === numPage && numPage > 1)
-      return this._generateMarkupBtnPre(curPage);
-
-    // Other page
-    if (curPage < numPage)
-      return this._generateMarkupBtnNext(curPage).concat(
+    // 首页
+    if (curPage === 1 && numPage > 1) {
+      markup = this._generateMarkupBtnNext(curPage);
+    } else if (curPage === numPage && numPage > 1) {
+      //最后一页
+      markup = this._generateMarkupBtnPre(curPage);
+    } else if (curPage < numPage) {
+      //中间的页面
+      markup = this._generateMarkupBtnNext(curPage).concat(
         this._generateMarkupBtnPre(curPage)
       );
+    } else {
+      markup = '';
+    }
 
-    // Page1, and there are No other pages
-    return '';
+    // Last page
+    return markup.concat(this._generateMarkupBtnCur(curPage));
   }
 
   _generateMarkupBtnPre(curPage) {
@@ -47,6 +50,13 @@ class PaginationView extends View {
           </svg>
           <span>Page ${curPage - 1}</span>
         </button>`;
+  }
+  // 当前页面
+  _generateMarkupBtnCur(curPage) {
+    return `
+     <button data-goto="${curPage}" class="btn--inline pagination__btn--cur">
+        <span>${curPage}</span>
+      </button>`;
   }
   _generateMarkupBtnNext(curPage) {
     return `      

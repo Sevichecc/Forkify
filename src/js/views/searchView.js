@@ -1,6 +1,5 @@
 class SearchView {
   _parenEl = document.querySelector('.search');
-
   // 获取输入字符串
   getQuery() {
     const query = this._parenEl.querySelector('.search__field').value;
