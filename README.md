@@ -7,3 +7,7 @@
 ## 功能架构
 
 ![](forkify-flowchart-part-3.png)
+
+## 性能
+
+![](lighthouse-score.png)
