@@ -570,6 +570,7 @@ const controlSearch = async function() {
         // 4) 初始化分页器
         _paginationViewJsDefault.default.render(_modelJs.state.search);
     } catch (err) {
+        console.log(err);
     }
 };
 // 分页器
@@ -2291,7 +2292,7 @@ parcelHelpers.export(exports, "MODAL_CLOSE_SEC", ()=>MODAL_CLOSE_SEC
 const API_URL = 'https://forkify-api.herokuapp.com/api/v2/recipes/';
 const TIMEOUT_SET = 10;
 const RES_PER_PAGE = 10;
-const KEY = 'f67d0974-f8de-4931-8859-985e0117f698';
+const KEY = 'ef4232d8-22e7-4d35-a691-c0a78741d53d';
 const MODAL_CLOSE_SEC = 2.5;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
@@ -2387,6 +2388,7 @@ const loadSearchResult = async function(query) {
     try {
         state.search.query = query;
         const data = await _helperJs.AJAX(`${_configJs.API_URL}?search=${query}&key=${_configJs.KEY}`);
+        console.log(data);
         // 将搜索结果创建新object
         state.search.results = data.data.recipes.map((rec)=>{
             return {
@@ -3205,8 +3207,6 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("./View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-var _iconsSvg = require("url:../../img/icons.svg");
-var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 class addRecipeView extends _viewJsDefault.default {
     _parentElement = document.querySelector('.upload');
     _message = 'Recipe was successfully uploaded :)';
@@ -3245,6 +3245,6 @@ class addRecipeView extends _viewJsDefault.default {
 }
 exports.default = new addRecipeView();
 
-},{"./View.js":"5cUXS","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ddCAb","aenu9"], "aenu9", "parcelRequire3a11")
+},{"./View.js":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ddCAb","aenu9"], "aenu9", "parcelRequire3a11")
 
 //# sourceMappingURL=index.e37f48ea.js.map

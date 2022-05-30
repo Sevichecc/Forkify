@@ -53,7 +53,9 @@ const controlSearch = async function () {
 
     // 4) 初始化分页器
     paginationView.render(model.state.search);
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 // 分页器

@@ -44,7 +44,7 @@ export const loadSearchResult = async function (query) {
   try {
     state.search.query = query;
     const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
-
+    console.log(data);
     // 将搜索结果创建新object
     state.search.results = data.data.recipes.map(rec => {
       return {
