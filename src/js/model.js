@@ -2,7 +2,22 @@ import { API_URL, RES_PER_PAGE, KEY } from './config.js';
 import { getJSON, sendJSON } from './helper.js';
 import { AJAX } from './helper.js';
 
-// 这里放app所用的数据
+/**
+ * 类型，用来存放所有数据
+ * @typedef State
+ * @property  {recipe}  recipe  菜单数据
+ * @property  {object}  search  搜索相关的数据
+ * @property  {string}  search.query  输入的搜索字符串
+ * @property  {object[]}  search.results  搜索结果
+ * @property  {number}  search.resultsPerPage 每页展示的搜索结果条目数量
+ * @property  {number}  search.page 当前所在页码号
+ * @property  {object[]}  bookmarks 书签数据
+ */
+
+/**
+ * 变量，应用的所有数据
+ * @type  State
+ */
 export const state = {
   recipe: {},
   search: {
@@ -13,6 +28,21 @@ export const state = {
   },
   bookmarks: [],
 };
+
+/**
+ * 类型，菜单数据
+ * @typedef recipe
+ * @property  {number} id 菜单的id
+ * @property  {string} title 菜单标题
+ * @property  {string} publisher 菜单发布者
+ * @property  {string} sourceUrl
+ */
+
+/**
+ * 函数，创建菜单对象
+ * @param {object} data  传入的菜单数据
+ * @returns {recipe}  返回创建好的菜单对象
+ */
 const createRecipeObject = function (data) {
   const { recipe } = data.data;
   return {
@@ -27,6 +57,13 @@ const createRecipeObject = function (data) {
     ...(recipe.key && { key: recipe }),
   };
 };
+
+/**
+ *  函数，加载菜单详情页面
+ * @param {number} id 菜单的id
+ * @returns {Promise} 返回基于此菜单id创建的菜单对象
+ */
+
 export const loadRecipe = async function (id) {
   try {
     const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
@@ -40,11 +77,15 @@ export const loadRecipe = async function (id) {
   }
 };
 
+/**
+ * 函数，加载搜索结果
+ * @param {string} query 输入的搜索字符串
+ * @returns {Promise<Object>} 返回搜索到的菜单数据
+ */
 export const loadSearchResult = async function (query) {
   try {
     state.search.query = query;
     const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
-    console.log(data);
     // 将搜索结果创建新object
     state.search.results = data.data.recipes.map(rec => {
       return {
@@ -61,6 +102,11 @@ export const loadSearchResult = async function (query) {
   }
 };
 
+/**
+ * 函数，计算搜索结果的页数
+ * @param {number} page 总页数
+ * @returns
+ */
 export const getSearchResultsPage = function (page = state.search.page) {
   state.search.page = page;
   const start = (page - 1) * state.search.resultsPerPage;
