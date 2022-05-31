@@ -28,14 +28,17 @@ export const state = {
   },
   bookmarks: [],
 };
-
 /**
  * 类型，菜单数据
  * @typedef Recipe
- * @property  {number} id 菜单的id
- * @property  {string} title 菜单标题
- * @property  {string} publisher 菜单发布者
- * @property  {string} sourceUrl
+ * @property  {string}  id 菜单的id
+ * @property  {string}  title 菜单标题
+ * @property  {string}  publisher 菜单来源
+ * @property  {string}  sourceUrl 来源网址
+ * @property  {string}  image 图片网址
+ * @property  {number}  servings  用餐人数
+ * @property  {number}  cookingTime 烹饪时间
+ * @property  {object}  ingredients 烹饪材料
  */
 
 /**
@@ -45,6 +48,7 @@ export const state = {
  */
 const createRecipeObject = function (data) {
   const { recipe } = data.data;
+  console.log(recipe);
   return {
     id: recipe.id,
     title: recipe.title,
@@ -54,12 +58,13 @@ const createRecipeObject = function (data) {
     servings: recipe.servings,
     cookingTime: recipe.cooking_time,
     ingredients: recipe.ingredients,
+    // 将额外的参数自动展开加入recipe object中
     ...(recipe.key && { key: recipe }),
   };
 };
 
 /**
- *  函数，加载菜单详情页面
+ * 函数，加载菜单详情页面
  * @param {number} id 菜单的id
  * @returns {Promise} 返回基于此菜单id创建的菜单对象
  */
