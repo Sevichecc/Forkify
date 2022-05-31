@@ -5,7 +5,7 @@ import { AJAX } from './helper.js';
 /**
  * 类型，用来存放所有数据
  * @typedef State
- * @property  {recipe}  recipe  菜单数据
+ * @property  {Recipe}  recipe  菜单数据
  * @property  {object}  search  搜索相关的数据
  * @property  {string}  search.query  输入的搜索字符串
  * @property  {object[]}  search.results  搜索结果
@@ -31,7 +31,7 @@ export const state = {
 
 /**
  * 类型，菜单数据
- * @typedef recipe
+ * @typedef Recipe
  * @property  {number} id 菜单的id
  * @property  {string} title 菜单标题
  * @property  {string} publisher 菜单发布者
@@ -41,7 +41,7 @@ export const state = {
 /**
  * 函数，创建菜单对象
  * @param {object} data  传入的菜单数据
- * @returns {recipe}  返回创建好的菜单对象
+ * @returns {Recipe}  返回创建好的菜单对象
  */
 const createRecipeObject = function (data) {
   const { recipe } = data.data;
