@@ -66,7 +66,7 @@ const createRecipeObject = function (data) {
 /**
  * 函数，加载菜单详情页面
  * @param {number} id 菜单的id
- * @returns {Promise} 返回基于此菜单id创建的菜单对象
+ * @returns {Promise<Recipe>} 返回基于此菜单id创建的菜单对象
  */
 
 export const loadRecipe = async function (id) {
@@ -85,7 +85,7 @@ export const loadRecipe = async function (id) {
 /**
  * 函数，加载搜索结果
  * @param {string} query 输入的搜索字符串
- * @returns {Promise<Object>} 返回搜索到的菜单数据
+ * @returns {Recipe} 返回搜索到的菜单数据
  */
 export const loadSearchResult = async function (query) {
   try {
