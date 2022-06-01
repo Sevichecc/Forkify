@@ -14,6 +14,11 @@ if (module.hot) {
   module.hot.accept();
 }
 
+/**
+ * 控制菜单相关状态
+ * @returns {Promise} 展示菜单
+ * @callback recipeView.renderErr 如果发生错误, 展示错误信息
+ */
 const controlRecipes = async function () {
   try {
     const id = window.location.hash.slice(1);
@@ -37,7 +42,10 @@ const controlRecipes = async function () {
   }
 };
 
-// 搜索
+/**
+ * 控制搜索功能
+ * @returns {Promise}
+ */
 const controlSearch = async function () {
   try {
     // 1）获取搜索内容
@@ -58,7 +66,10 @@ const controlSearch = async function () {
   }
 };
 
-// 分页器
+/**
+ * 控制分页器
+ * @param {number} goToPage 当前页面
+ */
 const controlPagination = function (goToPage) {
   // 1）展示新页面
   resultsView.render(model.getSearchResultsPage(goToPage));
@@ -67,6 +78,10 @@ const controlPagination = function (goToPage) {
   paginationView.render(model.state.search);
 };
 
+/**
+ *  控制用餐人数变动
+ * @param {number} newServings 当前用餐人数
+ */
 const controlServings = function (newServings) {
   // 1）更新state里面的recipe serving数据
   model.updateServings(newServings);
@@ -75,7 +90,7 @@ const controlServings = function (newServings) {
   recipeView.update(model.state.recipe);
 };
 
-// 书签
+/** 控制添加书签的功能 */
 const controlAddBookmark = function () {
   // 1）增添书签
   if (!model.state.recipe.bookmarked) model.addBookMark(model.state.recipe);
@@ -88,11 +103,18 @@ const controlAddBookmark = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+/**
+ * 控制书签相关菜单展示
+ */
 const controlBookmarks = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
-// 添加菜单
+/**
+ * 控制添加菜单的功能
+ * @param {Recipe} newRecipe  用户上传的菜单数据
+ * @callback addRecipeView.renderErr 如果添加失败，展示错误信息
+ */
 const controlAddRecipe = async function (newRecipe) {
   try {
     // 0) 加载
@@ -118,12 +140,14 @@ const controlAddRecipe = async function (newRecipe) {
       addRecipeView.toggleWindow();
     }, MODAL_CLOSE_SEC * 1000);
   } catch (err) {
-    // console.log(err);
     addRecipeView.renderErr(err.message);
   }
 };
 
-// subscriber,和view链接
+/**
+ * 初始化各项功能
+ * @description subscriber,和view链接
+ */
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
@@ -133,5 +157,4 @@ const init = function () {
   paginationView.addHandlerClick(controlPagination);
   addRecipeView.addHandlerUpload(controlAddRecipe);
 };
-
 init();

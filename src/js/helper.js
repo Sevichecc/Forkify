@@ -1,5 +1,10 @@
 import { TIMEOUT_SET } from './config';
 
+/**
+ *
+ * @param {number} s 超过多少秒就 reject请求
+ * @returns {Promise<Error>} reject并抛出一个Error
+ */
 const timeout = function (s) {
   return new Promise(function (_, reject) {
     setTimeout(function () {

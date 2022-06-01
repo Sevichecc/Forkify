@@ -15,7 +15,7 @@ import { AJAX } from './helper.js';
  */
 
 /**
- * 变量，应用的所有数据
+ * 应用的所有数据
  * @type  State
  */
 export const state = {
@@ -28,6 +28,7 @@ export const state = {
   },
   bookmarks: [],
 };
+
 /**
  * 类型，菜单数据
  * @typedef Recipe
@@ -39,16 +40,16 @@ export const state = {
  * @property  {number}  servings  用餐人数
  * @property  {number}  cookingTime 烹饪时间
  * @property  {object}  ingredients 烹饪材料
+ * @property  {boolean} bookmarked  是否已加入书签
  */
 
 /**
- * 函数，创建菜单对象
+ * 创建菜单对象
  * @param {object} data  传入的菜单数据
  * @returns {Recipe}  返回创建好的菜单对象
  */
 const createRecipeObject = function (data) {
   const { recipe } = data.data;
-  console.log(recipe);
   return {
     id: recipe.id,
     title: recipe.title,
@@ -58,40 +59,42 @@ const createRecipeObject = function (data) {
     servings: recipe.servings,
     cookingTime: recipe.cooking_time,
     ingredients: recipe.ingredients,
+
     // 将额外的参数自动展开加入recipe object中
     ...(recipe.key && { key: recipe }),
   };
 };
 
 /**
- * 函数，加载菜单详情页面
- * @param {number} id 菜单的id
+ * 加载菜单详情页面
+ * @param {string} id 菜单的id
  * @returns {Promise<Recipe>} 返回基于此菜单id创建的菜单对象
+ * @throws 如果无法加载，就抛出一个错误
  */
-
 export const loadRecipe = async function (id) {
   try {
     const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
     state.recipe = createRecipeObject(data);
-
     if (state.bookmarks.some(bookmark => bookmark.id === id))
       state.recipe.bookmarked = true;
-    else state.recipe.bookmark = false;
+    else state.recipe.bookmarked = false;
   } catch (err) {
     throw err;
   }
 };
 
 /**
- * 函数，加载搜索结果
+ * 加载搜索结果
  * @param {string} query 输入的搜索字符串
- * @returns {Recipe} 返回搜索到的菜单数据
+ * @returns {Promise<Recipe>} 返回搜索到的菜单数据
+ * @throws 如果无法加载，就抛出一个错误
  */
 export const loadSearchResult = async function (query) {
   try {
     state.search.query = query;
     const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
-    // 将搜索结果创建新object
+
+    // 将搜索结果创建新 Recipe object
     state.search.results = data.data.recipes.map(rec => {
       return {
         id: rec.id,
@@ -108,9 +111,10 @@ export const loadSearchResult = async function (query) {
 };
 
 /**
- * 函数，计算搜索结果的页数
+ * 计算搜索结果的页数
  * @param {number} page 总页数
- * @returns
+ * @see loadSearchResult
+ * @returns {Recipe} 返回搜索到的菜单数据（部分）与 loadSearchResult里返回的数据结构相同
  */
 export const getSearchResultsPage = function (page = state.search.page) {
   state.search.page = page;
@@ -119,6 +123,10 @@ export const getSearchResultsPage = function (page = state.search.page) {
   return state.search.results.slice(start, end);
 };
 
+/**
+ * 更新用餐人数
+ * @param {number} newServings 更新后的用餐人数
+ */
 export const updateServings = function (newServings) {
   state.recipe.ingredients.forEach(ing => {
     ing.quantity = (ing.quantity * newServings) / state.recipe.servings;
@@ -126,11 +134,17 @@ export const updateServings = function (newServings) {
   state.recipe.servings = newServings;
 };
 
+/** 存储书签数据到 localStorage*/
 const persistBookmarks = function () {
   localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
 };
+
+/**
+ * 添加书签
+ * @param {Recipe} recipe 已添加书签的菜单数据
+ */
 export const addBookMark = function (recipe) {
-  // 添加书签
+  // 添加书签数据
   state.bookmarks.push(recipe);
 
   // 标记为已添加书签
@@ -138,8 +152,11 @@ export const addBookMark = function (recipe) {
   persistBookmarks();
 };
 
+/**
+ * 删除书签
+ * @param {string} id 需要删除的书签的id
+ */
 export const deleteBookMark = function (id) {
-  // 删除书签
   const index = state.bookmarks.findIndex(el => el.id === id);
   state.bookmarks.splice(index, 1);
 
@@ -148,6 +165,7 @@ export const deleteBookMark = function (id) {
   persistBookmarks();
 };
 
+/** 初始化书签 */
 const init = function () {
   const storage = localStorage.getItem('bookmarks');
   if (storage) state.bookmarks = JSON.parse(storage);
@@ -155,12 +173,18 @@ const init = function () {
 
 init();
 
-// for debuging
+/** for debuging */
 const clearBookmarks = function () {
   localStorage.clear('bookmarks');
 };
-
 // clearBookmarks();
+
+/**
+ * 上传菜单
+ * @param {Recipe} newRecipe 用户上传的菜单数据
+ * @returns {Promise} 处理好的菜单数据
+ * @throws 如果创建失败，抛出一个错误
+ */
 export const uploadRecipe = async function (newRecipe) {
   try {
     const ingredients = Object.entries(newRecipe)
