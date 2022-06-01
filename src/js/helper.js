@@ -1,7 +1,7 @@
 import { TIMEOUT_SET } from './config';
 
 /**
- *
+ * 超时报错
  * @param {number} s 超过多少秒就 reject请求
  * @returns {Promise<Error>} reject并抛出一个Error
  */
@@ -13,14 +13,19 @@ const timeout = function (s) {
   });
 };
 
+/**
+ * 上传数据
+ * @param {string} url API端口链接
+ * @param {object} uploadData 上传的数据
+ * @returns {object} 返回上传数据
+ * @throws {error} 如果上传失败，就抛出一个error到module中
+ */
 export const AJAX = async function (url, uploadData = undefined) {
   try {
     const fetchPro = uploadData
       ? fetch(url, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(uploadData),
         })
       : fetch(url);
@@ -29,10 +34,11 @@ export const AJAX = async function (url, uploadData = undefined) {
     const res = await Promise.race([fetchPro, timeout(TIMEOUT_SET)]);
     const data = await res.json();
 
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+    if (!res.ok) {
+      throw new Error(`${data.message} (${res.status})`);
+    }
     return data;
   } catch (err) {
-    // 返回err到module中，而不是在这里处理它
     throw err;
   }
 };
