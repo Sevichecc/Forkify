@@ -2295,20 +2295,14 @@ try {
 },{}],"k5Hzs":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "API_URL", ()=>API_URL
-);
 parcelHelpers.export(exports, "TIMEOUT_SET", ()=>TIMEOUT_SET
 );
 parcelHelpers.export(exports, "RES_PER_PAGE", ()=>RES_PER_PAGE
 );
-parcelHelpers.export(exports, "KEY", ()=>KEY
-);
 parcelHelpers.export(exports, "MODAL_CLOSE_SEC", ()=>MODAL_CLOSE_SEC
 );
-const API_URL = undefined;
 const TIMEOUT_SET = 10;
 const RES_PER_PAGE = 10;
-const KEY = undefined;
 const MODAL_CLOSE_SEC = 2.5;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
