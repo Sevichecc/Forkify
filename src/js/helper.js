@@ -1,3 +1,4 @@
+// @ts-check
 import { TIMEOUT_SET } from './config';
 
 /**
@@ -17,7 +18,7 @@ const timeout = function (s) {
  * 上传数据
  * @param {string} url API端口链接
  * @param {object} uploadData 上传的数据
- * @returns {object} 返回上传数据
+ * @returns {Promise<any>} 返回上传数据
  * @throws {error} 如果上传失败，就抛出一个error到module中
  */
 export const AJAX = async function (url, uploadData = undefined) {

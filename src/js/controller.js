@@ -1,3 +1,4 @@
+// @ts-check
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import { MODAL_CLOSE_SEC } from './config.js';
